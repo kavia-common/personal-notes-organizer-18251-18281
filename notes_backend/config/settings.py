@@ -136,3 +136,24 @@ CORS_ALLOW_ALL_ORIGINS = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
 X_FRAME_OPTIONS = 'ALLOWALL'
+
+# Django REST Framework configuration
+REST_FRAMEWORK = {
+    # Use SessionAuthentication to support login/logout via session cookies,
+    # and BasicAuthentication for tooling compatibility (e.g., Swagger).
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+}
+
+# Session settings (sane defaults; can be overridden via environment)
+SESSION_COOKIE_SECURE = False  # Set True in production with HTTPS
+CSRF_COOKIE_SECURE = False     # Set True in production with HTTPS
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'

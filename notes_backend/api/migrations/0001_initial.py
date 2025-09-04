@@ -1,0 +1,34 @@
+from django.db import migrations, models
+import django.db.models.deletion
+from django.conf import settings
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='Note',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('created_at', models.DateTimeField(auto_now_add=True, db_index=True)),
+                ('updated_at', models.DateTimeField(auto_now=True, db_index=True)),
+                ('title', models.CharField(help_text='Title of the note.', max_length=255)),
+                ('content', models.TextField(blank=True, help_text='Body/content of the note.')),
+                ('is_archived', models.BooleanField(default=False, help_text='Whether the note is archived.')),
+                ('owner', models.ForeignKey(db_index=True, help_text='The user that owns this note.', on_delete=django.db.models.deletion.CASCADE, related_name='notes', to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['-updated_at', '-created_at'],
+            },
+        ),
+        migrations.AddIndex(
+            model_name='note',
+            index=models.Index(fields=['owner', 'is_archived'], name='api_note_owner_i_e1a7b8_idx'),
+        ),
+    ]
